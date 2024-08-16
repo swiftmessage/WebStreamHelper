@@ -32,7 +32,7 @@ def main():
     print("Пожалуйста, сделайте бекап всех файлов .json, если это необходимо.")
     input("Нажмите ENTER, чтобы продолжить или CTRL+C для отмены.")
 
-    repo_url = "https://github.com/swiftmessage/swiftmessageexeapp.git"
+    repo_url = "https://github.com/swiftmessage/WebStreamHelper.git"
     repo_temp_dir = "repo_temp"  # Временная директория для клонирования
 
     # Клонирование в временную директорию
