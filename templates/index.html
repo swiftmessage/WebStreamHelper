@@ -63,9 +63,17 @@
             display: none;
             flex-direction: column;
             align-items: center;
+            width: 320px; /* Ensures consistent width for forms */
+            margin: 0 auto; /* Center forms horizontally */
         }
         #login-form input, #setup-form input {
+            font-size: 18px;  /* Larger font size for readability */
+            padding: 10px;    /* More padding for easier interaction */
+            width: 100%;      /* Fill the width of the form */
+            box-sizing: border-box; /* Include padding in width calculation */
             margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc; /* Add a subtle border for input fields */
         }
     </style>
     <script>
