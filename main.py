@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, jsonify, make_response, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import json
 import os
 import pyautogui
 import subprocess
-import hashlib
+import bcrypt
 
 app = Flask(__name__)
 
@@ -49,7 +49,14 @@ def save_password_hash(password_hash):
         json.dump({'password_hash': password_hash}, file, ensure_ascii=False, indent=4)
 
 def hash_password(password):
-    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+    # Generate a salt and hash the password
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
+
+def check_password(stored_hash, password):
+    # Check if the provided password matches the stored hash
+    return bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8'))
 
 def check_authorization():
     password_hash = load_password_hash()
@@ -74,9 +81,11 @@ def setup_password():
         # Redirect to index if password is already set
         return redirect(url_for('index'))
     return render_template('setup_password.html')
+
 @app.route('/info')
 def info():
     return render_template("info.html")
+
 @app.route('/config')
 def config_page():
     if not check_authorization():
@@ -133,7 +142,7 @@ def set_password():
         password_hash = hash_password(password)
         save_password_hash(password_hash)
         response = jsonify({'status': 'success'})
-        response.set_cookie('logged_in', 'true', max_age=259200)  # Cookie expires in 3 days
+        response.set_cookie('logged_in', 'true', max_age=3600)  # Cookie expires in 1 hour
         return response
     return jsonify({'status': 'error', 'message': 'Password is required'}), 400
 
@@ -141,9 +150,9 @@ def set_password():
 def login():
     password = request.json.get('password')
     password_hash = load_password_hash()
-    if password_hash and hash_password(password) == password_hash:
+    if password_hash and check_password(password_hash, password):
         response = jsonify({'status': 'success'})
-        response.set_cookie('logged_in', 'true', max_age=259200)  # Cookie expires in 3 days
+        response.set_cookie('logged_in', 'true', max_age=3600)  # Cookie expires in 1 hour
         return response
     return jsonify({'status': 'error'}), 403
 
