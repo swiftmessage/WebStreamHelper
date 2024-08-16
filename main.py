@@ -154,4 +154,4 @@ def check_login():
 
 if __name__ == '__main__':
     server_ip = load_local_ip()
-    app.run(host=server_ip, port=5000, debug=True)
+    app.run(host=server_ip, port=5000, debug=false)
