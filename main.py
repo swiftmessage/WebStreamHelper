@@ -133,7 +133,7 @@ def set_password():
         password_hash = hash_password(password)
         save_password_hash(password_hash)
         response = jsonify({'status': 'success'})
-        response.set_cookie('logged_in', 'true', max_age=3600)  # Cookie expires in 1 hour
+        response.set_cookie('logged_in', 'true', max_age=259200)  # Cookie expires in 3 days
         return response
     return jsonify({'status': 'error', 'message': 'Password is required'}), 400
 
@@ -143,7 +143,7 @@ def login():
     password_hash = load_password_hash()
     if password_hash and hash_password(password) == password_hash:
         response = jsonify({'status': 'success'})
-        response.set_cookie('logged_in', 'true', max_age=3600)  # Cookie expires in 1 hour
+        response.set_cookie('logged_in', 'true', max_age=259200)  # Cookie expires in 3 days
         return response
     return jsonify({'status': 'error'}), 403
 
