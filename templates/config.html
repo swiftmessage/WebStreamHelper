@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки Stream Deck</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            margin-top: 5px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+    <script>
+        function saveConfig() {
+            const action = document.getElementById('action-name').value.trim();
+            const type = document.getElementById('action-type').value;
+            const hotkey = document.getElementById('hotkey').value.trim();
+            const command = document.getElementById('command').value.trim();
+
+            if (action === '') {
+                alert('Имя действия не может быть пустым');
+                return;
+            }
+
+            const config = {
+                [action]: {
+                    type: type,
+                    hotkey: type === 'hotkey' ? hotkey : undefined,
+                    command: type === 'command' ? command : undefined
+                }
+            };
+
+            fetch('/save_config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'saved') {
+                    alert('Настройки сохранены!');
+                    window.location.href = '/';
+                } else {
+                    alert('Ошибка при сохранении настроек');
+                }
+            });
+        }
+
+        function setPassword() {
+            const newPassword = document.getElementById('new-password').value.trim();
+            if (newPassword === '') {
+                alert('Пароль не может быть пустым');
+                return;
+            }
+
+            fetch('/set_password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password: newPassword })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Пароль установлен!');
+                    document.getElementById('new-password').value = '';
+                } else {
+                    alert('Ошибка при установке пароля');
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Настройки Stream Deck</h1>
+
+    <div class="form-group">
+        <label for="action-name">Имя действия:</label>
+        <input type="text" id="action-name" placeholder="Введите имя действия">
+    </div>
+    <div class="form-group">
+        <label for="action-type">Тип действия:</label>
+        <select id="action-type">
+            <option value="hotkey">Комбинация клавиш</option>
+            <option value="command">Команда</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="hotkey">Комбинация клавиш:</label>
+        <input type="text" id="hotkey" placeholder="Введите комбинацию клавиш (например, ctrl+alt+t)">
+    </div>
+    <div class="form-group">
+        <label for="command">Команда:</label>
+        <input type="text" id="command" placeholder="Введите команду для выполнения">
+    </div>
+    <button onclick="saveConfig()">Сохранить</button>
+
+    <h2>Установка пароля</h2>
+    <div class="form-group">
+        <label for="new-password">Новый пароль:</label>
+        <input type="password" id="new-password" placeholder="Введите новый пароль">
+    </div>
+
+    <button onclick="setPassword()">Установить пароль</button>
+
+    <button class="button-configure" onclick="window.location.href='/info'">О программе</button>
+</body>
+</html>

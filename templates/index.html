@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Stream Helper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .button-configure {
+            background-color: #007BFF;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .button-action {
+            background-color: #4CAF50; /* Зеленый по умолчанию */
+            color: #fff;
+        }
+        .button-action.muted {
+            background-color: #f44336; /* Красный */
+        }
+        .button-action.active {
+            background-color: #4CAF50; /* Зеленый */
+        }
+        .button-action.inactive {
+            background-color: #f44336; /* Красный */
+        }
+        .delete-icon {
+            color: red;
+            cursor: pointer;
+            font-size: 20px;
+            margin-left: 10px;
+            transition: color 0.3s;
+        }
+        .delete-icon:hover {
+            color: darkred;
+        }
+        #login-form, #setup-form {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        #login-form input, #setup-form input {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        async function showMainContent() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('setup-form').style.display = 'none';
+            document.getElementById('main-content').style.display = 'flex';
+        }
+
+        async function login() {
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password: password })
+            });
+
+            const data = await response.json();
+            if (data.status === 'success') {
+                showMainContent();
+            } else {
+                alert('Неверный пароль');
+            }
+        }
+
+        async function checkLogin() {
+            const response = await fetch('/check_login');
+            const data = await response.json();
+
+            if (!data.logged_in) {
+                document.getElementById('main-content').style.display = 'none';
+                document.getElementById('login-form').style.display = 'flex';
+            }
+        }
+
+        async function setupPassword() {
+            const password = document.getElementById('setup-password').value;
+
+            const response = await fetch('/set_password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password: password })
+            });
+
+            const data = await response.json();
+            if (data.status === 'success') {
+                showMainContent();
+            } else {
+                alert('Ошибка при установке пароля');
+            }
+        }
+
+        async function performAction(action) {
+            const response = await fetch('/action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=${action}`
+            });
+
+            const data = await response.json();
+            if (data.status === 'error') {
+                alert('Неавторизованный доступ');
+                document.getElementById('login-form').style.display = 'flex';
+                document.getElementById('main-content').style.display = 'none';
+            }
+        }
+
+        async function deleteButton(action) {
+            const response = await fetch('/delete_button', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ action: action })
+            });
+
+            const data = await response.json();
+            if (data.status === 'deleted') {
+                const button = document.getElementById(action);
+                button.remove();
+            }
+        }
+
+        window.onload = async function() {
+            await checkLogin();
+        }
+    </script>
+</head>
+<body>
+    <h1>Web Stream Helper</h1>
+
+    <div id="setup-form">
+        <h2>Установить пароль</h2>
+        <input type="password" id="setup-password" placeholder="Введите новый пароль" required>
+        <button onclick="setupPassword()">Установить пароль</button>
+    </div>
+
+    <div id="login-form">
+        <h2>Вход</h2>
+        <input type="password" id="password" placeholder="Введите пароль" required>
+        <button onclick="login()">Войти</button>
+    </div>
+
+    <div id="main-content">
+        <div id="buttons">
+            {% for name, settings in config.items() %}
+                <div>
+                    <button id="{{ name }}" class="button-action {% if settings.status == 'muted' %}muted{% else %}active{% endif %}"
+                            onclick="performAction('{{ name }}')">
+                        {{ name }}
+                    </button>
+                    <span class="delete-icon" onclick="deleteButton('{{ name }}')">✖</span>
+                </div>
+            {% endfor %}
+        </div>
+        <button class="button-configure" onclick="window.location.href='/config'">Настройки</button>
+    </div>
+</body>
+</html>
