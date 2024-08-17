@@ -5,60 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>О программе - Web Stream Helper</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+       /* Анимация появления элементов */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
-        h1, h2 {
-            color: #007BFF;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        h2 {
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-        ul {
-            list-style-type: disc;
-            margin-left: 20px;
-        }
-        ul li {
-            margin-bottom: 10px;
-        }
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #777;
-        }
-        .back-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .back-button:hover {
-            background-color: #0056b3;
-        }
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        animation: fadeIn 1s ease-out;
+    }
+
+    h1, h2 {
+        color: #007BFF;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        animation: fadeIn 1.2s ease-out;
+    }
+
+    h2 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 1.8em;
+        animation: fadeIn 1.4s ease-out;
+    }
+
+    p {
+        margin-bottom: 15px;
+        text-align: justify;
+        animation: fadeIn 1.6s ease-out;
+    }
+
+    ul {
+        list-style-type: disc;
+        margin-left: 20px;
+    }
+
+    ul li {
+        margin-bottom: 10px;
+        animation: fadeIn 1.8s ease-out;
+    }
+
+    .footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 0.9em;
+        color: #777;
+        animation: fadeIn 2s ease-out;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.3s;
+        animation: fadeIn 2.2s ease-out;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
     </style>
 </head>
 <body>
-    <h1>Web Stream Deck</h1>
+    <h1>Web Stream Helperk</h1>
     <h2>Описание</h2>
     <p>
        Web Stream Helper - это веб-приложение, которое позволяет пользователям настраивать и управлять действиями на их компьютере через веб-интерфейс. Приложение разработано для имитации функциональности аппаратных клавиатур Stream Deck, предоставляя пользователям гибкость и контроль над своими действиями.
@@ -71,7 +103,7 @@
     </ul>
     <h2>Как использовать</h2>
     <p>
-        Чтобы начать использовать Web Stream Helper , настройте конфигурацию действий через интерфейс приложения. Вы можете добавлять новые действия, удалять старые и настраивать параметры, такие как комбинации клавиш или команды для выполнения.
+        Чтобы начать использовать Web Stream Helper, настройте конфигурацию действий через интерфейс приложения. Вы можете добавлять новые действия, удалять старые и настраивать параметры, такие как комбинации клавиш или команды для выполнения.
     </p>
     <p>
         После настройки действий вы можете взаимодействовать с приложением через главную страницу, нажимая на кнопки для выполнения действий.
@@ -81,7 +113,7 @@
         Если у вас возникли вопросы или предложения по улучшению программы, пожалуйста, свяжитесь с нами через [email@example.com].
     </p>
     <div class="footer">
-        &copy; 2024 Web Stream Helper . Open Source. Программа не для продажи https://github.com/swiftmessage/WebStreamHelper.git
+        &copy; 2024 Web Stream Helper. Open Source. Программа НЕ ДЛЯ КОМЕРЧЕСКОГО ИСПОЛЬЗОВАНИЯ.Cделанно командой SwiftMessage
     </div>
     <a class="back-button" href="/">Вернуться на главную</a>
 </body>
